@@ -1,0 +1,14 @@
+.carousel-frame{
+  width: 800px;
+  height: 500px;
+  border: 1px solid black;
+  margin: 0 auto;
+  overflow: hidden; 
+  position: relative;
+}
+.images-container{
+  position: absolute;
+}
+.images-container img{
+  float: left;
+}
