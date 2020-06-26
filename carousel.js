@@ -55,19 +55,14 @@ class ImageCarousel {
 
   slideImage(index, newIndex) {
     this.moveImage = setInterval(() => {
-      if (this.left < 0){
-        this.left = 0;
-      }
-      if (this.left > this.totalwidth - this.imagesContainerWidth){
-        this.left = this.totalwidth - this.imagesContainerWidth
-      }
-
+      
       this.left = this.left + this.speed * (newIndex - index);
-      console.log(this.left);
-      if (this.left === this.imagesContainerWidth * newIndex) {
+
+      if (this.left === this.imagesContainerWidth * newIndex || this.left < 0 || this.left > this.totalwidth-this.imagesContainerWidth) {
+        this.left = this.imagesContainerWidth * newIndex;
         clearInterval(this.moveImage);
       }
-      
+
       this.imagesContainer.style.left = -this.left + 'px';
       
     }, this.transitionTime);
@@ -76,6 +71,9 @@ class ImageCarousel {
 
   dotNavigate() {
     this.dotsContainer.addEventListener('click', e => {
+      if(this.moveImage){
+        this.left = this.imagesContainerWidth*this.newIndex;
+      }
       clearInterval(this.moveImage);
       clearInterval(this.holdImage);
       const targetDot = e.target.closest('span');
