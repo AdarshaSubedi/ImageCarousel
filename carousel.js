@@ -6,8 +6,6 @@ class ImageCarousel {
     this.totalImages = this.imagesContainer.children.length;
     this.totalwidth = this.imagesContainerWidth * this.totalImages;
     this.imagesContainer.style.width = this.totalwidth + 'px';
-    
-    this.dotsContainer = document.createElement('div');
     this.dotCollection = [];
     this.transitionTime = 1;
     this.speed = transitionSpeed * 10;
@@ -27,6 +25,7 @@ class ImageCarousel {
   }
 
   createDots() {
+    this.dotsContainer = document.createElement('div');
     this.dotsContainer.setAttribute('style', 'transform:translateX(-50%); position:absolute; z-index:1; bottom:15px; left:50%;');
     this.carouselframe.appendChild(this.dotsContainer);
 
@@ -132,5 +131,5 @@ class ImageCarousel {
 }
 
 //ImageCarousel(<transitionSpeed>, <holdtime in seconds>)
-let imageCarousel = new ImageCarousel(1, 2);
+let imageCarousel = new ImageCarousel(0.5, 3);
 imageCarousel.init();
