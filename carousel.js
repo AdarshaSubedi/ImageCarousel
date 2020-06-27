@@ -8,7 +8,7 @@ class ImageCarousel {
     this.imagesContainer.style.width = this.totalwidth + 'px';
     this.dotCollection = [];
     this.transitionTime = 1;
-    this.speed = transitionSpeed * 10;
+    this.speed = transitionSpeed;
     this.holdTime = holdTime * 1000;
     this.left = 0;
     this.index = 0;
@@ -55,11 +55,13 @@ class ImageCarousel {
 
   slideImage(index, newIndex) {
     this.moveImage = setInterval(() => {
+      clearInterval(this.holdImage);
       this.left = this.left + this.speed * (newIndex - index);
 
       if (this.left === this.imagesContainerWidth * newIndex || this.left < 0 || this.left > this.totalwidth-this.imagesContainerWidth) {
         this.left = this.imagesContainerWidth * newIndex;
         clearInterval(this.moveImage);
+        this.automateSlider();
       }
 
       this.imagesContainer.style.left = -this.left + 'px';
@@ -117,7 +119,7 @@ class ImageCarousel {
 
   automateSlider() {
     this.holdImage = setInterval(() => {
-
+      clearInterval(this.slideImage);
       this.index = this.newIndex;
       this.newIndex++;
       if (this.newIndex === this.totalImages){
@@ -130,6 +132,6 @@ class ImageCarousel {
 
 }
 
-//ImageCarousel(<transitionSpeed>, <holdtime in seconds>)
-let imageCarousel = new ImageCarousel(0.5, 3);
+//ImageCarousel(<transitionSpeed in pixels>, <holdtime in seconds>)
+let imageCarousel = new ImageCarousel(10, 4);
 imageCarousel.init();
