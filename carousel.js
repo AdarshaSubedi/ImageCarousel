@@ -49,13 +49,19 @@ class ImageCarousel {
   }
 
   indicateDot(){
-    this.dotCollection[this.index].style.opacity = '50%';
+    this.dotCollection.forEach(dot => {
+      dot.style.opacity = '50%';
+    });
     this.dotCollection[this.newIndex].style.opacity = '100%';
+  }
+  clear(){
+    clearInterval(this.moveImage);
+    clearInterval(this.holdImage);
   }
 
   slideImage(index, newIndex) {
+    clearInterval(this.holdImage);
     this.moveImage = setInterval(() => {
-      clearInterval(this.holdImage);
       this.left = this.left + this.speed * (newIndex - index);
 
       if (this.left === this.imagesContainerWidth * newIndex || this.left < 0 || this.left > this.totalwidth-this.imagesContainerWidth) {
@@ -73,46 +79,39 @@ class ImageCarousel {
 
   dotNavigate() {
     this.dotsContainer.addEventListener('click', e => {
-      if(this.moveImage){
-        this.left = this.imagesContainerWidth*this.newIndex;
-      }
-      clearInterval(this.moveImage);
-      clearInterval(this.holdImage);
       const targetDot = e.target.closest('span');
       if (!targetDot) return;
-
+      this.clear();
       const targetIndex = this.dotCollection.findIndex(dot => dot === targetDot);
       this.index = this.newIndex;
       this.newIndex = targetIndex;
+      if(this.index === this.newIndex){
+        this.left = this.imagesContainerWidth*this.newIndex;
+      }
       this.slideImage(this.index, this.newIndex);
-      this.automateSlider();
       this.indicateDot();
     });
   }
 
   arrowNavigate(){
     this.leftArrow.addEventListener('click', () => {
-      clearInterval(this.moveImage);
-      clearInterval(this.holdImage);
+      this.clear()
       this.index = this.newIndex;
       this.newIndex--
       if(this.newIndex < 0){
         this.newIndex = this.totalImages - 1;
       }
       this.slideImage(this.index, this.newIndex);
-      this.automateSlider();
       this.indicateDot();
     });
     this.rightArrow.addEventListener('click', () => {
-      clearInterval(this.moveImage);
-      clearInterval(this.holdImage);
+      this.clear();
       this.index = this.newIndex;
       this.newIndex++;
       if(this.newIndex === this.totalImages){
         this.newIndex = 0;
       }
       this.slideImage(this.index, this.newIndex);
-      this.automateSlider();
       this.indicateDot();
     });
   }
@@ -126,12 +125,12 @@ class ImageCarousel {
         this.newIndex = 0;
       }
       this.slideImage(this.index, this.newIndex);
-      this.indicateDot();
     }, this.holdTime);
+    this.indicateDot();
   }
 
 }
 
 //ImageCarousel(<transitionSpeed in pixels>, <holdtime in seconds>)
-let imageCarousel = new ImageCarousel(10, 4);
+let imageCarousel = new ImageCarousel(10, 2);
 imageCarousel.init();
